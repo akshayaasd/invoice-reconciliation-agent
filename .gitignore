@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.env
+*.env
+
+# Node
+web-ui/node_modules/
+web-ui/.next/
+web-ui/out/
+web-ui/.vercel
+web-ui/npm-debug.log*
+web-ui/*.tsbuildinfo
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Exercise Files
+Gmail - Sitetracker Take Home Exercise + Walkthrough.PDF
+Gmail - Sitetracker Take Home Exercise + Walkthrough.txt
+demo_video_script.txt
+data/AI_Demo_Engineer_TakeHome_Brief.md

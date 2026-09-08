@@ -1,0 +1,175 @@
+import os
+import re
+import resend
+import base64
+from dotenv import load_dotenv
+
+# Load .env from the same directory as this file
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+
+
+def body_to_html(body: str) -> str:
+    """
+    Convert the plain-text email body into clean, styled HTML.
+    Handles:
+      - Bullet lines starting with • or *
+      - Paragraph blocks separated by blank lines
+      - The "Sincerely / [Name] / Company" signature block
+    """
+    lines = body.split("\n")
+    html_parts = []
+    bullet_buffer = []
+
+    def flush_bullets():
+        if bullet_buffer:
+            items = "".join(f"<li>{b}</li>" for b in bullet_buffer)
+            html_parts.append(
+                f'<ul style="margin:12px 0 12px 0; padding-left:0; list-style:none;">'
+                f'{items}</ul>'
+            )
+            bullet_buffer.clear()
+
+    in_signature = False
+    sig_lines = []
+
+    for line in lines:
+        stripped = line.strip()
+
+        # Detect "Sincerely" block
+        if stripped.lower().startswith("sincerely"):
+            flush_bullets()
+            in_signature = True
+            sig_lines.append(stripped)
+            continue
+
+        if in_signature:
+            sig_lines.append(stripped)
+            continue
+
+        # Bullet lines  • or *
+        if stripped.startswith("•") or stripped.startswith("*"):
+            content = stripped.lstrip("•* ").strip()
+            # Bold the job ref portion before the first colon
+            match = re.match(r"^(\S+\s+\([^)]+\)):\s*(.*)", content)
+            if match:
+                ref = match.group(1)
+                rest = match.group(2)
+                content = f"<strong>{ref}:</strong> {rest}"
+            bullet_buffer.append(
+                f'<span style="color:#0d9488;margin-right:8px;">•</span>{content}'
+            )
+        elif stripped == "":
+            flush_bullets()
+        else:
+            flush_bullets()
+            html_parts.append(
+                f'<p style="margin:0 0 12px 0; font-size:14px; line-height:1.7; color:#374151;">'
+                f'{stripped}</p>'
+            )
+
+    flush_bullets()
+
+    # Render signature
+    sig_html = ""
+    if sig_lines:
+        sig_inner = "".join(
+            f'<p style="margin:0; font-size:14px; line-height:1.8; color:#374151;">{s}</p>'
+            for s in sig_lines if s
+        )
+        sig_html = f'<div style="margin-top:24px;">{sig_inner}</div>'
+
+    return "".join(html_parts) + sig_html
+
+
+def send_email(to, subject: str, body: str, attachment_csv: bytes = None, attachment_filename: str = None) -> dict:
+    """
+    Send an email using Resend API.
+    `to` can be a string or a list of strings.
+    """
+    resend.api_key = os.environ.get("RESEND_API_KEY")
+    if not resend.api_key:
+        print("ERROR: RESEND_API_KEY not set. Cannot send email.")
+        return {"status": "error", "error": "Missing API key"}
+
+    print("\n" + "="*50)
+    print("SENDING EMAIL VIA RESEND")
+    print(f"TO:      {to}")
+    print(f"SUBJECT: {subject}")
+    print("="*50 + "\n")
+
+    body_html = body_to_html(body)
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f3f4f6;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:32px 16px;">
+    <tr><td align="center">
+      <table width="620" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;">
+
+        <!-- Header bar -->
+        <tr>
+          <td style="background:#0d9488;padding:20px 32px;">
+            <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#99f6e4;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Invoice Reconciliation Agent</p>
+            <p style="margin:4px 0 0;font-family:Arial,sans-serif;font-size:13px;color:#ffffff;">Human-approved dispute notice</p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:32px 32px 24px;font-family:Arial,sans-serif;">
+            {body_html}
+          </td>
+        </tr>
+
+        <!-- Disputed items table -->
+        <tr>
+          <td style="padding:0 32px 32px;font-family:Arial,sans-serif;">
+            <p style="margin:0 0 8px;font-size:11px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">Audit Report (CSV attached)</p>
+            <p style="margin:0;font-size:12px;color:#9ca3af;">The full discrepancy report is attached as a CSV file for your records.</p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f9fafb;padding:16px 32px;border-top:1px solid #e5e7eb;">
+            <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#9ca3af;">
+              This email was reviewed and approved by a human operator before dispatch.
+              It was generated by the Riverton Broadband Partners Invoice Reconciliation Agent.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>"""
+
+    payload = {
+        "from": "Acme <onboarding@resend.dev>",
+        "to": to,
+        "subject": subject,
+        "html": html,
+    }
+
+    if attachment_csv is not None and attachment_filename is not None:
+        csv_b64 = base64.b64encode(attachment_csv).decode('utf-8')
+        payload["attachments"] = [
+            {
+                "filename": attachment_filename,
+                "content": csv_b64,
+                "content_type": "text/csv"
+            }
+        ]
+
+    try:
+        response = resend.Emails.send(payload)
+        return {
+            "status": "sent",
+            "message_id": response.get("id"),
+            "attachment": attachment_filename if attachment_csv is not None else None
+        }
+    except Exception as e:
+        print("Resend error:", e)
+        return {"status": "error", "error": str(e)}

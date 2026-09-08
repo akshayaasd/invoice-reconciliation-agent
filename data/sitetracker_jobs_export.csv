@@ -1,0 +1,41 @@
+sitetracker__Job_Number__c,Name,sitetracker__Job_Status__c,sitetracker__Job_Type__c,sitetracker__Category__c,Site_Name__c,sitetracker__Project__r.Name,sitetracker__Vendor__r.Name,sitetracker__Scheduled_Start__c,sitetracker__Actual_End__c,sitetracker__st_Job_Completion_Date__c
+JOB-04401,Aerial strand placement - RVT-018 Maple & 4th,Completed,Construction,Wireline,RVT-018 Maple & 4th,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-03,2026-03-03
+JOB-04402,Aerial fiber placement - RVT-018 Maple & 4th,Completed,Construction,Wireline,RVT-018 Maple & 4th,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-04,2026-03-04
+JOB-04403,Fusion splice - RVT-018 Maple & 4th,Completed,Construction,Wireline,RVT-018 Maple & 4th,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-05,2026-03-05
+JOB-04404,Pole make-ready - RVT-021 Grant Ave,Completed,Construction,Wireline,RVT-021 Grant Ave,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-05,2026-03-05
+JOB-04405,Aerial strand placement - RVT-021 Grant Ave,Completed,Construction,Wireline,RVT-021 Grant Ave,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-06,2026-03-06
+JOB-04406,Aerial fiber placement - RVT-021 Grant Ave,Completed,Construction,Wireline,RVT-021 Grant Ave,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-09,2026-03-09
+JOB-04407,Splice case install - RVT-021 Grant Ave,Completed,Construction,Wireline,RVT-021 Grant Ave,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-09,2026-03-09
+JOB-04408,Directional bore - RVT-024 Halsted Corr,Completed,Construction,Wireline,RVT-024 Halsted Corr,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-10,2026-03-10
+JOB-04409,Underground fiber placement - RVT-024 Halsted Corr,Completed,Construction,Wireline,RVT-024 Halsted Corr,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-11,2026-03-11
+JOB-04410,Handhole set - RVT-024 Halsted Corr,Completed,Construction,Wireline,RVT-024 Halsted Corr,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-11,2026-03-11
+JOB-04411,Surface restoration - RVT-024 Halsted Corr,Completed,Construction,Wireline,RVT-024 Halsted Corr,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-12,2026-03-12
+JOB-04413,Fusion splice - RVT-024 Halsted Corr,Completed,Construction,Wireline,RVT-024 Halsted Corr,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-13,2026-03-13
+JOB-04414,Aerial strand placement - RVT-027 Bell Rd,Completed,Construction,Wireline,RVT-027 Bell Rd,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-13,2026-03-13
+JOB-04415,Aerial fiber placement - RVT-027 Bell Rd,Completed,Construction,Wireline,RVT-027 Bell Rd,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-16,2026-03-16
+JOB-04416,Pedestal set - RVT-027 Bell Rd,Completed,Construction,Wireline,RVT-027 Bell Rd,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-16,2026-03-16
+JOB-04417,Pole make-ready - RVT-027 Bell Rd,Completed,Construction,Wireline,RVT-027 Bell Rd,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-17,2026-03-17
+JOB-04418,Directional bore - RVT-030 Dunbar Ln,Completed,Construction,Wireline,RVT-030 Dunbar Ln,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-17,2026-03-17
+JOB-04419,Underground fiber placement - RVT-030 Dunbar Ln,Completed,Construction,Wireline,RVT-030 Dunbar Ln,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-18,2026-03-18
+JOB-04420,Handhole set - RVT-030 Dunbar Ln,Completed,Construction,Wireline,RVT-030 Dunbar Ln,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-18,2026-03-18
+JOB-04421,Splice case install - RVT-030 Dunbar Ln,Completed,Construction,Wireline,RVT-030 Dunbar Ln,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-19,2026-03-19
+JOB-04422,Surface restoration - RVT-030 Dunbar Ln,Completed,Construction,Wireline,RVT-030 Dunbar Ln,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-19,2026-03-19
+JOB-04423,Aerial strand placement - RVT-033 Cypress,Completed,Construction,Wireline,RVT-033 Cypress,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-20,2026-03-20
+JOB-04426,Aerial fiber placement - RVT-033 Cypress,In Progress,Construction,Wireline,RVT-033 Cypress,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04427,Directional bore - RVT-036 Two Rivers,Scheduled,Construction,Wireline,RVT-036 Two Rivers,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04428,Underground fiber placement - RVT-036 Two Rivers,Scheduled,Construction,Wireline,RVT-036 Two Rivers,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04429,Pole make-ready - RVT-036 Two Rivers,In Progress,Construction,Wireline,RVT-036 Two Rivers,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04430,Handhole set - RVT-036 Two Rivers,Unassigned,Construction,Wireline,RVT-036 Two Rivers,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04431,Surface restoration - RVT-036 Two Rivers,In Progress,Construction,Wireline,RVT-036 Two Rivers,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04432,Splice case install - RVT-039 Alder St,Scheduled,Construction,Wireline,RVT-039 Alder St,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04433,Aerial strand placement - RVT-039 Alder St,In Progress,Construction,Wireline,RVT-039 Alder St,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-24,2026-03-24
+JOB-04434,Fusion splice - RVT-039 Alder St,In Progress,Construction,Wireline,RVT-039 Alder St,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-25,2026-03-25
+JOB-04435,Underground fiber placement - RVT-042 Kessler,Completed,Construction,Wireline,RVT-042 Kessler,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-25,2026-03-25
+JOB-04436,Directional bore - RVT-042 Kessler,Completed,Construction,Wireline,RVT-042 Kessler,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-26,2026-03-26
+JOB-04437,Pole make-ready - RVT-042 Kessler,Completed,Construction,Wireline,RVT-042 Kessler,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-26,2026-03-26
+JOB-04438,Pedestal set - RVT-042 Kessler,Cancelled,Construction,Wireline,RVT-042 Kessler,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,,
+JOB-04439,Fusion splice - RVT-018 Maple & 4th,Completed,Construction,Wireline,RVT-018 Maple & 4th,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-27,2026-03-27
+JOB-04440,Surface restoration - RVT-024 Halsted Corr,Completed,Construction,Wireline,RVT-024 Halsted Corr,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-27,2026-03-27
+JOB-04441,Aerial fiber placement - RVT-027 Bell Rd,Completed,Construction,Wireline,RVT-027 Bell Rd,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-30,2026-03-30
+JOB-04442,Splice case install - RVT-030 Dunbar Ln,Completed,Construction,Wireline,RVT-030 Dunbar Ln,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-30,2026-03-30
+JOB-04443,Handhole set - RVT-033 Cypress,Completed,Construction,Wireline,RVT-033 Cypress,Riverton Metro FTTH - Phase 2,Corridor Line Construction LLC,2026-03-01,2026-03-31,2026-03-31

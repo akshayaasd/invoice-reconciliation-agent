@@ -1,0 +1,49 @@
+CORRIDOR LINE CONSTRUCTION LLC
+Invoice No,CLC-26-0342
+Bill To,Riverton Broadband Partners
+Period,01-Mar-2026 to 31-Mar-2026
+PO Reference,PO-2026-0117
+
+Job Ref,Location,Work Item,Description,UOM,Qty,Rate,Line Total
+04401,RVT-018 Maple & 4th,AER-STRAND,Aerial strand placement,FT,2400,2.15,5160.00
+04402,RVT-018 Maple & 4th,AER-FIBER,Aerial fiber placement,FT,2400,1.85,4440.00
+04403,RVT-018 Maple & 4th,SPL-FUSION,Fusion splice,EA,96,38.00,3648.00
+04404,RVT-021 Grant Ave,MR-POLE,Pole make-ready,EA,7,1250.00,8750.00
+04405,RVT-021 Grant Ave,AER-STRAND,Aerial strand placement,FT,1850,2.15,3977.50
+04406,RVT-021 Grant Ave,AER-FIBER,Aerial fiber placement,FT,1850,1.85,3422.50
+04407,RVT-021 Grant Ave,SPL-CASE,Splice case install,EA,3,425.00,1275.00
+04408,RVT-024 Halsted Corr,DIR-BORE,Directional bore,FT,420,14.50,6090.00
+04409,RVT-024 Halsted Corr,UG-FIBER,Underground fiber placement,FT,420,3.40,1428.00
+04410,RVT-024 Halsted Corr,HH-SET,Handhole set,EA,4,890.00,3560.00
+04411,RVT-024 Halsted Corr,RESTORE,Surface restoration,FT,420,6.75,2835.00
+04413,RVT-024 Halsted Corr,SPL-FUSION,Fusion splice,EA,72,38.00,2736.00
+04414,RVT-027 Bell Rd,AER-STRAND,Aerial strand placement,FT,3100,2.15,6665.00
+04415,RVT-027 Bell Rd,AER-FIBER,Aerial fiber placement,FT,3100,1.85,5735.00
+04416,RVT-027 Bell Rd,PED-SET,Pedestal set,EA,6,610.00,3660.00
+04417,RVT-027 Bell Rd,MR-POLE,Pole make-ready,EA,9,1250.00,11250.00
+04418,RVT-030 Dunbar Ln,DIR-BORE,Directional bore,FT,260,14.50,3770.00
+04419,RVT-030 Dunbar Ln,UG-FIBER,Underground fiber placement,FT,260,3.40,884.00
+04420,RVT-030 Dunbar Ln,HH-SET,Handhole set,EA,2,890.00,1780.00
+04421,RVT-030 Dunbar Ln,SPL-CASE,Splice case install,EA,2,425.00,850.00
+04422,RVT-030 Dunbar Ln,RESTORE,Surface restoration,FT,260,6.75,1755.00
+04423,RVT-033 Cypress,AER-STRAND,Aerial strand placement,FT,1500,2.15,3225.00
+04426,RVT-033 Cypress,AER-FIBER,Aerial fiber placement,FT,1500,1.85,2775.00
+04427,RVT-036 Two Rivers,DIR-BORE,Directional bore,FT,580,14.50,8410.00
+04428,RVT-036 Two Rivers,UG-FIBER,Underground fiber placement,FT,580,3.40,1972.00
+04429,RVT-036 Two Rivers,MR-POLE,Pole make-ready,EA,12,1250.00,15000.00
+04430,RVT-036 Two Rivers,HH-SET,Handhole set,EA,5,890.00,4450.00
+04431,RVT-036 Two Rivers,RESTORE,Surface restoration,FT,580,6.75,3915.00
+4432-R2,RVT-039 Alder St,SPL-CASE,Splice case install,EA,4,425.00,1700.00
+04433,RVT-039 Alder St,AER-STRAND,Aerial strand placement,FT,2750,2.15,5912.50
+04434,RVT-039 Alder St,SPL-FUSION,Fusion splice,EA,120,38.00,4560.00
+04435,RVT-042 Kessler,UG-FIBER,Underground fiber placement,FT,1140,3.40,3876.00
+04436,RVT-042 Kessler,DIR-BORE,Directional bore,FT,975,14.50,14137.50
+04437,RVT-042 Kessler,MR-POLE,Pole make-ready,EA,11,1250.00,13750.00
+04438,RVT-042 Kessler,PED-SET,Pedestal set,EA,3,610.00,1830.00
+4439-R2,RVT-018 Maple & 4th,SPL-FUSION,Fusion splice,EA,24,38.00,912.00
+4440-R2,RVT-024 Halsted Corr,RESTORE,Surface restoration,FT,140,6.75,945.00
+4441-R2,RVT-027 Bell Rd,AER-FIBER,Aerial fiber placement,FT,310,1.85,573.50
+4442-R2,RVT-030 Dunbar Ln,SPL-CASE,Splice case install,EA,1,425.00,425.00
+4443-R2,RVT-033 Cypress,HH-SET,Handhole set,EA,1,890.00,890.00
+
+,,,,,,INVOICE TOTAL,172929.50

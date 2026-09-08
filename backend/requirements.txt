@@ -1,0 +1,7 @@
+pandas
+requests
+fastapi
+uvicorn
+pydantic
+resend
+python-dotenv
