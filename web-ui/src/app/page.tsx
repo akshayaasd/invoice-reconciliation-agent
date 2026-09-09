@@ -40,7 +40,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/metadata")
+    fetch("http://localhost:8001/api/metadata")
       .then((res) => res.json())
       .then((data) => setMetadata(data))
       .catch(console.error);
@@ -65,7 +65,7 @@ export default function Dashboard() {
 
     try {
       const [res] = await Promise.all([
-        fetch("http://localhost:8000/api/analyze", { method: "POST" }),
+        fetch("http://localhost:8001/api/analyze", { method: "POST" }),
         new Promise((resolve) => setTimeout(resolve, 6000)),
       ]);
 
@@ -81,7 +81,7 @@ export default function Dashboard() {
       clearInterval(stepInterval);
       setIsAuditing(false);
       console.error(e);
-      alert("Failed to connect to backend. Is it running on port 8000?");
+      alert("Failed to connect to backend. Is it running on port 8001?");
     }
   };
 
@@ -89,14 +89,24 @@ export default function Dashboard() {
     setSendingEmail(true);
     try {
       const csvData = buildCsv(results.discrepancies);
-      const res = await fetch("http://localhost:8000/api/send_email", {
+
+      // Re-approve the draft in case the user edited it
+      const approveRes = await fetch("http://localhost:8001/api/approve_draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email_subject: results.email_subject, email_body: emailDraft })
+      });
+      if (!approveRes.ok) throw new Error("Failed to approve edited draft");
+      const approveData = await approveRes.json();
+
+      const res = await fetch("http://localhost:8001/api/send_email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email_body: emailDraft,
           invoice_no: metadata.invoice_no,
           csv_data: csvData,
-          approval_token: results.approval_token,
+          approval_token: approveData.approval_token,
           email_subject: results.email_subject
         }),
       });

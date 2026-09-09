@@ -45,7 +45,9 @@ _PENDING_APPROVALS: dict[str, str] = {}  # token -> SHA-256 digest of (to, subje
 
 def _digest(to: str, subject: str, body: str) -> str:
     import json
-    payload = json.dumps({"to": to, "subject": subject, "body": body},
+    # Normalize newlines to prevent browser \r\n vs \n mismatch
+    normalized_body = body.replace('\r\n', '\n')
+    payload = json.dumps({"to": to, "subject": subject, "body": normalized_body},
                          sort_keys=True, ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
 
@@ -90,6 +92,19 @@ def analyze():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+class ApproveRequest(BaseModel):
+    email_body: str
+    email_subject: str
+
+@app.post("/api/approve_draft")
+def approve_draft(req: ApproveRequest):
+    """Mint a new token for an edited draft. The frontend calls this when the human clicks 'Send'."""
+    to = "ap@corridorline.example"
+    token = secrets.token_urlsafe(16)
+    _PENDING_APPROVALS[token] = _digest(to, req.email_subject, req.email_body)
+    return {"approval_token": token}
+
+
 class SendRequest(BaseModel):
     email_body: str
     invoice_no: str
@@ -109,7 +124,7 @@ def send_dispute_email(req: SendRequest):
     to = "ap@corridorline.example"
     subject = req.email_subject
 
-    expected_digest = _PENDING_APPROVALS.pop(req.approval_token, None)
+    expected_digest = _PENDING_APPROVALS.get(req.approval_token)
     if expected_digest is None:
         raise HTTPException(
             status_code=403,
@@ -122,6 +137,9 @@ def send_dispute_email(req: SendRequest):
             status_code=403,
             detail="Message content has changed since approval. Re-run the audit or re-approve the edited draft."
         )
+
+    # Token is valid and digest matches, consume it
+    _PENDING_APPROVALS.pop(req.approval_token, None)
 
     try:
         result = send_email(

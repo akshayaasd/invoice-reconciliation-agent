@@ -44,7 +44,7 @@ def draft_email_with_llm(discrepancies: list, metadata: dict = None) -> str:
     approved = invoice_total - total_disputed
 
     prompt = f"""You are drafting an outbound vendor dispute email on behalf of {metadata['bill_to']}.
-The recipient is the accounts-payable team at {metadata['vendor']}.
+The recipient is the team at {metadata['vendor']}.
 This is an on-the-record business email. Anything you assert must be defensible.
 
 INVOICE UNDER REVIEW
@@ -86,10 +86,10 @@ RULES:
 
     # Try calling a local Ollama instance.
     try:
-        print("Attempting to connect to local Ollama (llama3)...")
+        print("Attempting to connect to local Ollama (llama3.2:1b)...")
         response = requests.post(
             "http://localhost:11434/api/generate",
-            json={"model": "llama3", "prompt": prompt, "stream": False},
+            json={"model": "llama3.2:1b", "prompt": prompt, "stream": False},
             timeout=30
         )
         if response.status_code == 200:
@@ -125,7 +125,7 @@ RULES:
 
     body = "\n\n".join(sections)
 
-    return f"""Dear Accounts Payable,
+    return f"""Dear {metadata['vendor']} Team,
 
 We have reviewed invoice {metadata['invoice_no']} for {metadata['period']} against our job records \
 and purchase order {metadata.get('po_ref', 'PO-2026-0117')}, and we are not able to approve it in \
