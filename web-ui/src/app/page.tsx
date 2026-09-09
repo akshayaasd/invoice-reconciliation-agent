@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { AlertCircle, CheckCircle2, FileSpreadsheet, Send, Download, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { AlertCircle, CheckCircle2, FileSpreadsheet, Send, Download, Search, ChevronLeft, ChevronRight, PieChart as PieChartIcon } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const PAGE_SIZE = 10;
 
@@ -31,9 +32,9 @@ export default function Dashboard() {
 
   // Helper: build CSV string from discrepancies array
   const buildCsv = (discrepancies: any[]) => {
-    const headers = "job,work_item,rule,severity,billed,allowed,dollar_impact,original_ref";
+    const headers = "job,work_item,status,rule,severity,billed,allowed,dollar_impact,original_ref";
     const rows = discrepancies.map((d: any) =>
-      [d.job, d.work_item, `"${d.rule}"`, d.severity, d.billed, d.allowed, d.dollar_impact, d.original_ref].join(",")
+      [d.job, d.work_item, d.status, `"${d.rule}"`, d.severity, d.billed, d.allowed, d.dollar_impact, d.original_ref].join(",")
     );
     return [headers, ...rows].join("\n");
   };
@@ -95,6 +96,8 @@ export default function Dashboard() {
           email_body: emailDraft,
           invoice_no: metadata.invoice_no,
           csv_data: csvData,
+          approval_token: results.approval_token,
+          email_subject: results.email_subject
         }),
       });
       if (res.ok) setEmailSent(true);
@@ -129,6 +132,38 @@ export default function Dashboard() {
     );
   });
 
+  const chartData = useMemo(() => {
+    if (!results) return { pie: [], bar: [] };
+    
+    const ruleImpacts: Record<string, number> = {};
+
+    results.discrepancies.forEach((d: any) => {
+      let genericRule = d.rule.split('.')[0];
+      if (d.rule.startsWith("Status contradicts")) genericRule = "Status contradicts completion dates";
+      
+      if (!ruleImpacts[genericRule]) ruleImpacts[genericRule] = 0;
+      ruleImpacts[genericRule] += d.dollar_impact;
+    });
+
+    const disputedAmount = results.summary_by_severity?.["Disputed"] || 0;
+    const needsReviewAmount = results.summary_by_severity?.["Needs review"] || 0;
+    const cleanAmount = 172929.50 - (disputedAmount + needsReviewAmount);
+
+    const pie = [
+      { name: "Clean", value: cleanAmount, color: "#10b981" }, // green-500
+      { name: "Needs Review", value: needsReviewAmount, color: "#f59e0b" }, // amber-500
+      { name: "Disputed", value: disputedAmount, color: "#ef4444" }, // red-500
+    ];
+
+    const bar = Object.keys(ruleImpacts).map(rule => ({
+      rule: rule,
+      fullRule: rule,
+      impact: ruleImpacts[rule]
+    })).sort((a, b) => b.impact - a.impact);
+
+    return { pie, bar };
+  }, [results]);
+
   if (!metadata)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -143,11 +178,18 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-8 py-5 flex flex-col md:flex-row md:items-center justify-between sticky top-0 z-10 shadow-sm gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">🤖 AI Invoice Auditor</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Reconcile subcontractor invoices against Sitetracker Job execution and PO data.
-          </p>
+        <div className="flex items-center gap-6">
+          <img 
+            src="https://www.sitetracker.com/wp-content/uploads/2022/06/Sitetracker-Logo-Approved-2022_rgb-fullcolor.svg" 
+            alt="Sitetracker" 
+            className="h-8" 
+          />
+          <div className="border-l border-gray-300 pl-6">
+            <h1 className="text-xl font-bold text-gray-900">AI Invoice Auditor</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Reconcile subcontractor invoices against Sitetracker Job execution and PO data.
+            </p>
+          </div>
         </div>
         <button
           onClick={runAudit}
@@ -245,6 +287,55 @@ export default function Dashboard() {
                 </div>
               </div>
 
+              {/* Charts */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {/* Pie Chart */}
+                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm lg:col-span-1 flex flex-col">
+                  <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <PieChartIcon size={16} className="text-gray-400" /> Breakdown by Status
+                  </p>
+                  <div className="flex-1 w-full min-h-[250px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie data={chartData.pie} innerRadius={45} outerRadius={70} paddingAngle={2} dataKey="value" stroke="none">
+                          {chartData.pie.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          formatter={(val: number) => `$${val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`}
+                          contentStyle={{ borderRadius: '8px', fontSize: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} 
+                        />
+                        <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px' }} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Bar Chart */}
+                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm lg:col-span-2 flex flex-col">
+                  <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <AlertCircle size={16} className="text-gray-400" /> Financial Impact by Rule
+                  </p>
+                  <div className="flex-1 w-full min-h-[250px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart layout="vertical" data={chartData.bar} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
+                        <XAxis type="number" tickFormatter={(val) => `$${val/1000}k`} tick={{fontSize: 11, fill: '#9ca3af'}} axisLine={false} tickLine={false} />
+                        <YAxis type="category" dataKey="rule" width={200} tick={{fontSize: 11, fill: '#6b7280'}} axisLine={false} tickLine={false} />
+                        <Tooltip 
+                          formatter={(val: number) => [`$${val.toLocaleString(undefined, {minimumFractionDigits: 2})}`, 'Impact']}
+                          labelFormatter={(label, payload) => payload?.[0]?.payload?.fullRule || label}
+                          contentStyle={{ borderRadius: '8px', fontSize: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} 
+                          labelStyle={{ color: '#374151', fontWeight: 500, paddingBottom: '4px' }}
+                        />
+                        <Bar dataKey="impact" fill="#0f766e" radius={[0, 4, 4, 0]} maxBarSize={30} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Audit table */}
                 <div className="lg:col-span-7">
@@ -278,9 +369,9 @@ export default function Dashboard() {
                       <div className="bg-red-50 text-red-900 p-4 rounded-lg mb-5 border border-red-100 flex gap-3 text-sm">
                         <AlertCircle className="shrink-0 text-red-500 mt-0.5" size={18} />
                         <div>
-                          <strong>${results.estimated_overbilling.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>{" "}
+                          <strong>${results.disputed_overbilling.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>{" "}
                           of this <strong>$172,929.50</strong> invoice does not hold up —{" "}
-                          <strong>{((results.estimated_overbilling / 172929.50) * 100).toFixed(1)}%</strong> is billing for work Sitetracker says has not happened.
+                          <strong>{((results.disputed_overbilling / 172929.50) * 100).toFixed(1)}%</strong> is billing for work Sitetracker says has not happened.
                         </div>
                       </div>
 
@@ -290,6 +381,7 @@ export default function Dashboard() {
                             <tr>
                               <th className="px-4 py-3 font-medium whitespace-nowrap">Job Ref</th>
                               <th className="px-4 py-3 font-medium whitespace-nowrap">Work Item</th>
+                              <th className="px-4 py-3 font-medium whitespace-nowrap">Status</th>
                               <th className="px-4 py-3 font-medium whitespace-nowrap">Severity</th>
                               <th className="px-4 py-3 font-medium whitespace-nowrap">Impact</th>
                               <th className="px-4 py-3 font-medium">Rule</th>
@@ -305,6 +397,7 @@ export default function Dashboard() {
                                 <tr key={i} className="hover:bg-gray-50 transition-colors">
                                   <td className="px-4 py-3 font-mono text-gray-600 whitespace-nowrap">{d.original_ref}</td>
                                   <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{d.work_item}</td>
+                                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap text-xs font-medium">{d.status}</td>
                                   <td className="px-4 py-3 whitespace-nowrap">
                                     <span className={`px-2 py-1 rounded text-xs font-semibold ${d.severity === "Disputed" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-800"}`}>
                                       {d.severity}

@@ -1,3 +1,17 @@
+## Updates applied before final submission
+
+**Float → Decimal arithmetic.** Rate and quantity comparisons now use `decimal.Decimal` throughout. Float equality on values like `2.15` and `14.50` is unreliable — `Decimal` compares exactly.
+
+**Header-row lookup replaces `skiprows=6`.** The invoice parser now searches for the 'Job Ref' column header rather than skipping a fixed number of rows. A vendor adding one line to their preamble would have silently broken the parse.
+
+**Structural approval token gate.** The `/api/analyze` route now mints a SHA-256 token bound to the exact `(to, subject, body)` of the drafted email. `/api/send_email` consumes that token and verifies the digest before dispatching. Editing the draft in the UI invalidates the token. Tokens are single-use. This is in addition to the architectural gate (the LLM is never given a tool schema).
+
+**`disputable_overbilling` vs `estimated_overbilling`.** The API now returns both. `estimated_overbilling` is the full flagged amount including internal-hold lines. `disputed_overbilling` is only what is being actively disputed with the vendor (Disputed severity only, excluding Needs review). The draft email and its financial summary use `disputed_overbilling`.
+
+**Tier-aware email language.** The LLM prompt and deterministic fallback now distinguish between two categories: Confirmed findings (cancelled / not started / over-PO — asserted as fact) and Not Yet Billable findings (In Progress, no completion date — asserted as not-yet-billable only, never as non-performed). This is the correct legal posture: for In-Progress jobs, the crew may be on site today.
+
+---
+
 # Submission Note
 
 ## What broke, and what we changed to fix it

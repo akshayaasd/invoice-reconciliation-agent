@@ -1,29 +1,43 @@
-You are an AI assistant acting on behalf of {bill_to}.
-We received an invoice from our subcontractor, {vendor}, but our reconciliation system found several discrepancies against our Sitetracker data.
+ROLE
+You are drafting outbound vendor correspondence on behalf of {bill_to}.
+The recipient is the accounts-payable team at {vendor}. This is an external,
+on-the-record business email. Anything you assert here must be defensible.
 
-Discrepancies found:
-{disc_text}
+TASK
+Write the plain-text BODY of an email stating that invoice {invoice_no} cannot
+be approved in full as submitted, itemising the disputed lines, and requesting
+a corrected invoice.
 
-Draft a professional but firm email to their billing contact. The output MUST follow exactly this format:
+FINDINGS FOR YOU TO INCLUDE
 
-Dear {vendor} Team,
+CONFIRMED ISSUES. Assert these directly as fact. The job was cancelled,
+never started, or the billed quantity exceeds what the purchase order authorises.
+{confirmed_lines}
 
-We have completed our reconciliation of the {period} invoice ({invoice_no}) against the corresponding Sitetracker job and purchase order records.
+NOT YET BILLABLE. Assert, but only as not-yet-billable. Our job
+records show these jobs still open with no completion recorded. Say the work is
+not recorded as complete and is therefore not yet billable. Do NOT say or imply
+the work was never performed — the crew may be on site today.
+{not_billable_lines}
 
-We identified several invoice lines that require clarification or correction before the invoice can be approved:
+WHAT TO WRITE
+1. One opening sentence: we have reviewed invoice {invoice_no} for {period}
+   against our job records and purchase order {po_ref}, and cannot approve it
+   in full as submitted.
+2. State the financial position: {approved} approved for payment now;
+   {total_disputed} not approved pending the items below.
+3. List the Confirmed Issues and Not Yet Billable items under clear, professional headings 
+   (e.g., "Confirmed Discrepancies" and "Items Pending Completion"). 
+   One line per job. Close each section with a subtotal. Do NOT write "Category 1" or "Category 2".
+4. Close by requesting a corrected invoice and inviting backup documentation
+   within 5 business days.
+5. Sign off as:
+   [Your Name]
+   {bill_to}
 
-[List the specific invoice lines for jobs marked In Progress/Scheduled with no completed work]
-[List the specific invoice lines for jobs not completed or cancelled]
-[List the specific invoice lines where quantities exceed PO limits]
-
-Please review these lines and provide a revised invoice that reflects the current job status and corrects the identified quantity discrepancies.
-
-If any of the flagged items have been completed or otherwise require clarification, please provide the relevant supporting information along with your response.
-
-We look forward to receiving your clarification and revised invoice.
-
-Sincerely,
-[Your Name]
-{bill_to}
-
-Output ONLY the body of the email following the exact structure above. Do not include subject lines or routing info in the body.
+RULES
+- Plain text only. No markdown, no bold, no bullets beyond simple hyphens.
+- Do not mention Sitetracker, automation, or AI.
+- Do not allege fraud or bad faith.
+- Do not invent any figures not supplied above.
+- Output the email body only.
