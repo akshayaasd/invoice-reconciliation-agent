@@ -19,9 +19,3 @@
 | Structural SHA-256 approval token | ✅ Done | Token minted at analyze time, consumed at send time, single-use |
 | Resend email dispatch | ✅ Done | Real delivery, attachment included, token verified before dispatch |
 | Human approval gate | ✅ Done | Architectural gate (LLM has no tool) + structural gate (SHA-256 token) |
-| Submission note | ✅ Done | Covers what broke, what's stubbed, what's next, AI usage, all fixes |
-| Implementation doc | ✅ Done | Updated with Decimal, dynamic headers, tier-aware prompting, token gate |
-| Demo video outline | ✅ Done | Updated with correct $45k/$10k figures, SHA-256 gate, CSV status column |
-| Demo video script | ✅ Done | Updated with correct figures and talking points |
-| Record demo video | ⬜ Todo | 2-3 minute narrated screen-capture walkthrough |
-| Re-zip codebase | ⬜ Todo | Fresh zip of `/invoice-reconciliation-agent` folder for submission |
