@@ -1,7 +1,17 @@
 import requests
 
+def get_base_url():
+    for port in [8000, 8001]:
+        try:
+            r = requests.get(f"http://localhost:{port}/api/metadata", timeout=1)
+            if r.ok:
+                return f"http://localhost:{port}"
+        except Exception:
+            pass
+    return "http://localhost:8000"
+
 def test_api():
-    base_url = "http://localhost:8001"
+    base_url = get_base_url()
     
     # Analyze
     print("Calling /api/analyze...")

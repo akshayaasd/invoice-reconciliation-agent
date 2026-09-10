@@ -39,11 +39,31 @@ export default function Dashboard() {
     return [headers, ...rows].join("\n");
   };
 
+  const [backendUrl, setBackendUrl] = useState<string>("http://localhost:8000");
+
+  const resolveBackendUrl = async (): Promise<string> => {
+    if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+    const candidatePorts = ["8000", "8001"];
+    for (const port of candidatePorts) {
+      try {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), 1000);
+        const res = await fetch(`http://localhost:${port}/api/metadata`, { signal: controller.signal });
+        clearTimeout(id);
+        if (res.ok) return `http://localhost:${port}`;
+      } catch (e) {}
+    }
+    return "http://localhost:8000";
+  };
+
   useEffect(() => {
-    fetch("http://localhost:8001/api/metadata")
-      .then((res) => res.json())
-      .then((data) => setMetadata(data))
-      .catch(console.error);
+    resolveBackendUrl().then((url) => {
+      setBackendUrl(url);
+      fetch(`${url}/api/metadata`)
+        .then((res) => res.json())
+        .then((data) => setMetadata(data))
+        .catch(console.error);
+    });
   }, []);
 
   const runAudit = async () => {
@@ -64,8 +84,10 @@ export default function Dashboard() {
     }, 1200);
 
     try {
+      const activeUrl = await resolveBackendUrl();
+      setBackendUrl(activeUrl);
       const [res] = await Promise.all([
-        fetch("http://localhost:8001/api/analyze", { method: "POST" }),
+        fetch(`${activeUrl}/api/analyze`, { method: "POST" }),
         new Promise((resolve) => setTimeout(resolve, 6000)),
       ]);
 
@@ -81,7 +103,7 @@ export default function Dashboard() {
       clearInterval(stepInterval);
       setIsAuditing(false);
       console.error(e);
-      alert("Failed to connect to backend. Is it running on port 8001?");
+      alert(`Failed to connect to backend at ${backendUrl}. Is it running on port 8000 or 8001?`);
     }
   };
 
@@ -91,7 +113,7 @@ export default function Dashboard() {
       const csvData = buildCsv(results.discrepancies);
 
       // Re-approve the draft in case the user edited it
-      const approveRes = await fetch("http://localhost:8001/api/approve_draft", {
+      const approveRes = await fetch(`${backendUrl}/api/approve_draft`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email_subject: results.email_subject, email_body: emailDraft })
@@ -99,7 +121,7 @@ export default function Dashboard() {
       if (!approveRes.ok) throw new Error("Failed to approve edited draft");
       const approveData = await approveRes.json();
 
-      const res = await fetch("http://localhost:8001/api/send_email", {
+      const res = await fetch(`${backendUrl}/api/send_email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
